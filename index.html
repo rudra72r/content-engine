@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <meta name="description" content="RJ Content Engine — Gemini-powered personal brand content generator. Research live trends, sharpen angles, write in your voice.">
+  <meta property="og:title" content="RJ Content Engine — Curiosity is the exploit.">
+  <meta property="og:description" content="AI-powered personal brand content generator for LinkedIn and X. Live trend research, PACC intelligence framework, batch and week modes.">
+  <meta property="og:type" content="website">
+  <title>RJ Content Engine — Curiosity is the exploit.</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Montserrat:wght@200;300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <main class="app">
+
+    <header class="hd">
+      <div class="hd-bracket-l" aria-hidden="true"></div>
+      <div class="hd-bracket-r" aria-hidden="true"></div>
+      <p class="eyebrow">Personal Brand Engine · Est. MMXXVI</p>
+      <h1 class="logotype">Rudra <span>Joshi</span></h1>
+      <p class="tagline">Curiosity is the exploit.</p>
+      <div class="hd-rule" aria-hidden="true"></div>
+    </header>
+
+    <section class="api-setup" id="api-setup" aria-label="API key setup">
+      <label class="api-label" for="api-key-input">Gemini API Key (Free)</label>
+      <div class="api-row">
+        <input class="api-input" type="password" id="api-key-input" placeholder="AIza..." autocomplete="off" spellcheck="false">
+        <button class="api-save-btn" id="api-save-btn" type="button">Save Key</button>
+      </div>
+      <p class="api-status" id="api-status">No key saved</p>
+      <p class="api-note">
+        Get your free key at <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener noreferrer">aistudio.google.com/apikey</a> → Create API Key — no credit card needed.
+        Stored in your browser only when saved locally. On deployed builds, the server proxy can use <code>GEMINI_API_KEY</code> so no key is required.
+      </p>
+    </section>
+
+    <section class="sec" aria-label="Content mode">
+      <h2 class="sec-label">Mode</h2>
+      <div class="modes" role="group" aria-label="Generation mode">
+        <button class="mode-btn on" type="button" data-mode="single" data-idx="0" id="m0">Single Post</button>
+        <button class="mode-btn" type="button" data-mode="batch" data-idx="1" id="m1">Batch × 3</button>
+        <button class="mode-btn" type="button" data-mode="thread" data-idx="2" id="m2">X Thread</button>
+        <button class="mode-btn" type="button" data-mode="week" data-idx="3" id="m3">Full Week</button>
+      </div>
+    </section>
+
+    <section class="sec" aria-label="Parameters">
+      <h2 class="sec-label">Parameters</h2>
+      <div class="ctrls">
+        <div class="ctrl">
+          <label class="clabel" for="sel-platform">Platform</label>
+          <select id="sel-platform">
+            <option value="auto">Auto — Best Pick</option>
+            <option value="linkedin">LinkedIn</option>
+            <option value="x">X (Twitter)</option>
+            <option value="both">Both</option>
+          </select>
+        </div>
+        <div class="ctrl">
+          <label class="clabel" for="sel-pillar">Pillar</label>
+          <select id="sel-pillar">
+            <option value="auto">Auto — Sharpest</option>
+            <option value="cyber">Cyber / Tech</option>
+            <option value="build">Build / Money</option>
+            <option value="life">Self / Life</option>
+          </select>
+        </div>
+        <div class="ctrl">
+          <label class="clabel" for="sel-type">Post Type</label>
+          <select id="sel-type">
+            <option value="auto">Auto — Best Angle</option>
+            <option value="bold">Bold Take</option>
+            <option value="observation">Sharp Observation</option>
+            <option value="confession">Honest Confession</option>
+            <option value="build_update">Build Update</option>
+            <option value="reframe">The Reframe</option>
+            <option value="callout">Direct Callout</option>
+            <option value="contrast">Contrast Hook</option>
+            <option value="psychology">Psychology Trigger</option>
+            <option value="community">Community Builder</option>
+          </select>
+        </div>
+      </div>
+    </section>
+
+    <section class="sec" aria-label="Raw idea">
+      <h2 class="sec-label">Raw Idea (optional)</h2>
+      <div class="idea-wrap">
+        <textarea id="raw-idea" placeholder="Dump your half-baked thought here. Messy is fine. The engine finds the sharpest angle buried inside it and builds that."></textarea>
+        <span class="char-ct">0</span>
+      </div>
+    </section>
+
+    <div class="live-row">
+      <div class="live-info">
+        <p class="live-title">Live Trend Research</p>
+        <p class="live-sub">AI uses Google Search to scan what's trending across all topics right now before writing</p>
+      </div>
+      <div class="tgl-wrap">
+        <span class="tgl-lbl" id="tgl-lbl">On</span>
+        <button class="tgl on" id="live-tgl" type="button" aria-label="Toggle live trend research"><span class="tgl-dot"></span></button>
+      </div>
+    </div>
+
+    <button class="gen-btn" type="button" id="gen-btn">
+      Generate Content
+      <span class="gen-sub">Research → Find sharpest angle → Write in your voice → Done</span>
+    </button>
+
+    <button class="week-btn" type="button" id="week-btn">
+      ⬛  Build Full Week — 3 LinkedIn + 7 X Posts
+    </button>
+
+    <div class="err" id="err" role="alert"></div>
+
+    <div class="loader" id="loader" aria-live="polite" aria-busy="true">
+      <span class="loader-glyph" aria-hidden="true">✦</span>
+      <p class="loader-txt" id="loader-txt">Scanning what your audience is debating...</p>
+      <div class="loader-bar" aria-hidden="true"><div class="loader-fill"></div></div>
+    </div>
+
+    <section class="research" id="research-panel" aria-label="Live research insights">
+      <h2 class="research-hd"><span class="live-dot" aria-hidden="true"></span>Live Intelligence — What Your Audience Is Discussing Now</h2>
+      <div id="research-items"></div>
+    </section>
+
+    <div class="rule" id="output-rule" style="display:none" aria-hidden="true"></div>
+
+    <section class="output" id="output" aria-label="Generated content">
+      <div class="out-hd">
+        <h2 class="out-title" id="out-title">Output</h2>
+        <button class="copy-all-btn" type="button">Copy All</button>
+      </div>
+      <div id="posts-wrap"></div>
+    </section>
+
+  </main>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
